@@ -1,3 +1,37 @@
+<?php
+include("config.php");
+//Initialize the session
+session_start();
+
+//Check if the user is already logged in, if yes then redirect him to home page
+if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true){
+  header("location:home.php");
+}
+$username = $password = "";
+$username_err = $password_err = "";
+
+//Processing form data when form is submitted
+if($_SERVER["REQUEST_METHOD"] == "POST"){ 
+  if(empty(trim($_POST["username"]))){
+    $username_err = "Please enter username";
+  }else{
+    $username = trim($_POST["username"]);
+  }
+  // Check if password is empty
+  if(empty(trim($_POST["password"]))){
+    $password_err = "Please enter your password";
+  }else{
+    $password = trim($_POST["password"]);
+  }
+
+  //Validate credentials
+  if(empty($username_err) && empty($password_err)){
+    //Prepare a select statement
+    $sql = "SELECT id, username, password FROM admin WHERE username = ?";
+  }
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,24 +51,24 @@
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
-    <a href="../../index2.html"><b>Admin</b>LTE</a>
+    <a href="#"><b>Admin</b>LTE</a>
   </div>
   <!-- /.login-logo -->
   <div class="card">
     <div class="card-body login-card-body">
       <p class="login-box-msg">Sign in to start your session</p>
 
-      <form action="../../index3.html" method="post">
+      <form action="home.php" method="post">
         <div class="input-group mb-3">
-          <input type="email" class="form-control" placeholder="Email">
+          <input type="text" class="form-control" placeholder="Enter username" name="username" required>
           <div class="input-group-append">
             <div class="input-group-text">
-              <span class="fas fa-envelope"></span>
+              <span class="fas fa-user"></span>
             </div>
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Password">
+          <input type="password" class="form-control" placeholder="Password" name="password" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
@@ -73,7 +107,7 @@
         <a href="forgot-password.html">I forgot my password</a>
       </p>
       <p class="mb-0">
-        <a href="register.html" class="text-center">Register a new membership</a>
+        <a href="register.php" class="text-center">Register a new membership</a>
       </p>
     </div>
     <!-- /.login-card-body -->

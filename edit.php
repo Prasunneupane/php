@@ -11,6 +11,7 @@ while($res = mysqli_fetch_array($result)){
     $emp_number = $res['emp_number'];
 
 }
+
 ?>
 <html>
 <meta charset="utf-8">
