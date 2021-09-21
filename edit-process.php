@@ -3,7 +3,7 @@ include_once("at_class.php");
 if(isset($_POST['update']))
 {	
 
-
+$id = mysqli_real_escape_string($mysqli, $_POST['id']);
 $emp_name = mysqli_real_escape_string($mysqli, $_POST['emp_name']);
 $emp_gender = mysqli_real_escape_string($mysqli, $_POST['emp_gender']);
 $emp_number = mysqli_real_escape_string($mysqli, $_POST['emp_number']);	
@@ -18,7 +18,9 @@ if(empty($emp_number)) {
 echo '<font color="red">Mobile Number field is empty.</font><br>';
 }		
 } else {	
-$result = mysqli_query($mysqli, "UPDATE emp_detail SET  emp_name='$emp_name',emp_gender='$emp_gender',emp_number='$emp_number' WHERE id='" . $_GET["id"] . "'");
+    $t="UPDATE emp_detail SET  emp_name='$emp_name',emp_gender='$emp_gender',emp_number='$emp_number' WHERE id='" . $id . "'";
+    
+$result = mysqli_query($mysqli, $t);
 header("Location: table-master.php");
 }
 }

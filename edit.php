@@ -5,6 +5,7 @@ include_once("at_class.php");
 
 $result = mysqli_query($mysqli,"select * from emp_detail where id='" . $_GET["id"] . "'");
 while($res = mysqli_fetch_array($result)){
+    $id =$res['id'];
     $emp_name =$res['emp_name'];
     $emp_gender = $res['emp_gender'];
     $emp_number = $res['emp_number'];
@@ -276,6 +277,7 @@ while($res = mysqli_fetch_array($result)){
 	
 
     <form method="post" action="edit-process.php">
+      <input type="hidden" name="id" value="<?php echo $id;?>"/>
                 <div class="card-body">
                   <div class="form-group">
                     <label for="exampleInputEmail1">Name</label>
@@ -306,7 +308,7 @@ while($res = mysqli_fetch_array($result)){
                 <!-- /.card-body -->
 
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary" name="update">Update</button>
+                  <button type="submit" class="btn btn-primary" name="update" value="1">Update</button>
                 </div>
     </form>
 </div>              
