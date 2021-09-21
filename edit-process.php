@@ -18,9 +18,9 @@ if(empty($emp_number)) {
 echo '<font color="red">Mobile Number field is empty.</font><br>';
 }		
 } else {	
-    $t="UPDATE emp_detail SET  emp_name='$emp_name',emp_gender='$emp_gender',emp_number='$emp_number' WHERE id='" . $id . "'";
+  
     
-$result = mysqli_query($mysqli, $t);
+$result = mysqli_query($mysqli,"UPDATE emp_detail SET  emp_name='$emp_name',emp_gender='$emp_gender',emp_number='$emp_number' WHERE id=$id ");
 header("Location: table-master.php");
 }
 }
