@@ -1,88 +1,96 @@
 <?php
-require_once"config.php";
-// define variables and initialize with empty values
+// Include config file
+require_once "config.php";
+ 
+// Define variables and initialize with empty values
 $username = $password = $confirm_password = "";
 $username_err = $password_err = $confirm_password_err = "";
-
+ 
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
-// Validate username
+ 
+    // Validate username
+    if(empty(trim($_POST["username"]))){
+        $username_err = "Please enter a username.";
+    } elseif(!preg_match('/^[a-zA-Z0-9_]+$/', trim($_POST["username"]))){
+        $username_err = "Username can only contain letters, numbers, and underscores.";
+    } else{
+        // Prepare a select statement
+        $sql = "SELECT id FROM admins WHERE username = ?";
+        
+        if($stmt = mysqli_prepare($link, $sql)){
+            // Bind variables to the prepared statement as parameters
+            mysqli_stmt_bind_param($stmt, "s", $param_username);
+            
+            // Set parameters
+            $param_username = trim($_POST["username"]);
+            
+            // Attempt to execute the prepared statement
+            if(mysqli_stmt_execute($stmt)){
+                /* store result */
+                mysqli_stmt_store_result($stmt);
+                
+                if(mysqli_stmt_num_rows($stmt) == 1){
+                    $username_err = "This username is already taken.";
+                } else{
+                    $username = trim($_POST["username"]);
+                }
+            } else{
+                echo "Oops! Something went wrong. Please try again later.";
+            }
 
-if(empty(trim($_POST["username"]))){
-  $$username_err = "Please enter a username";
-}elseif(!preg_match('/^[a-zA-Z0-9_]+$/', trim($_POST["username"]))){
-  $username_err = "Username can only contain letters, numbers and underscores. ";
-}else{
-  $sql = "SELECT id FROM admin WHERE username = ?";
-  
-  if($stmt = mysqli_prepare($link,$sql)){
-    //Bind variables to the prepared statement as parameters
-    mysqli_stmt_bind_param($stmt,"s",$param_username);
-
-    // Set Parameters
-    $param_username = trim($_POST["username"]);
-
-    //Attempt to execute the prepared statement
-    if(mysqli_stmt_execute($stmt)){
-      // Store result
-      mysqli_stmt_store_result($stmt);
-      if(mysqli_stmt_num_rows($stmt) == 1){
-        $username_err = "This username is already taken";
-      }else{
-        $username = trim($_POST["username"]);
-      }
-    }else{
-      echo "Oops! Something went wrong. Please try again later";
+            // Close statement
+            mysqli_stmt_close($stmt);
+        }
     }
-    // Close statement
-    mysqli_stmt_close($stmt);
-  }
-}
 //Validate Password
 if(empty(trim($_POST["password"]))){
-  $password_err = "Please enter a password";
-}elseif(strlen(trim($_POST["password"]))< 6){
+  $password_err = "Please enter a password.";     
+} elseif(strlen(trim($_POST["password"])) < 6){
   $password_err = "Password must have atleast 6 characters.";
-}else{
+} else{
   $password = trim($_POST["password"]);
 }
+
 // Validate confirm password
-if(empty(trim($_POST["password"]))){
-  $confirm_password_er = "Please confirm password";
-}else{
+if(empty(trim($_POST["confirm_password"]))){
+  $confirm_password_err = "Please confirm password.";     
+} else{
   $confirm_password = trim($_POST["confirm_password"]);
-if(empty($password_err)&& ($password != $confirm_password_err)){
-  $confirm_password_err = "Password did not match";
-  }  
+  if(empty($password_err) && ($password != $confirm_password)){
+      $confirm_password_err = "Password did not match.";
+  }
 }
 
 // Check input errors before inserting in database
 if(empty($username_err) && empty($password_err) && empty($confirm_password_err)){
-
-  // Prepare an insert statement
-  $sql = "INSERT INTO admin (username, password) VALUES(?,?)";
-
-  if($stmt = mysqli_prepare($link,$sql)){
-    // Bind variables to the prepared statement as parameters
-    mysqli_stmt_bind_param($stmt,"ss",$param_username,$param_password);
-
-    // Set parameters
-    $param_username = $username;
-    //create a hash password
-    $param_password = password_hash($password,PASSWORD_DEFAULT);
-    if(mysqli_stmt_execute($stmt)){
-      // Redirect to login page
-      header("loaction: login.php");
-    }else{
-      echo "Oops! Something went wrong. Please try again later.";
-    }
-    //Close statement
-    mysqli_stmt_close($stmt);
-  }
   
+  // Prepare an insert statement
+  $sql = "INSERT INTO admin (username, password) VALUES (?, ?)";
+   
+  if($stmt = mysqli_prepare($link, $sql)){
+      // Bind variables to the prepared statement as parameters
+      mysqli_stmt_bind_param($stmt, "ss", $param_username, $param_password);
+      
+      // Set parameters
+      $param_username = $username;
+      $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
+      
+      // Attempt to execute the prepared statement
+      if(mysqli_stmt_execute($stmt)){
+          // Redirect to login page
+          header("location: login.php");
+      } else{
+          echo "Oops! Something went wrong. Please try again later.";
+      }
+
+      // Close statement
+      mysqli_stmt_close($stmt);
+  }
 }
-//Close connection
-mysqli_close($link); 
+
+// Close connection
+mysqli_close($link);
 }
 ?>
 <!DOCTYPE html>
@@ -111,9 +119,9 @@ mysqli_close($link);
     <div class="card-body register-card-body">
       <p class="login-box-msg">Register a new membership</p>
 
-      <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+      <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
         <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="Username" name="username" class="form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $username; ?>">
+          <input type="text"  placeholder="Username" name="username" class="form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $username; ?>">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-user"><?php echo $username_err;?></span>
@@ -125,7 +133,7 @@ mysqli_close($link);
           <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $password; ?>" placeholder="Password">
           <div class="input-group-append">
             <div class="input-group-text">
-              <span class="fas fa-lock"></span>
+              <span class="fas fa-lock"><?php echo $password_err; ?></span>
             </div>
           </div>
         </div>
@@ -133,7 +141,7 @@ mysqli_close($link);
           <input type="password" name="confirm_password" class="form-control <?php echo (!empty($confirm_password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $confirm_password; ?>" placeholder="Confirm password">
           <div class="input-group-append">
             <div class="input-group-text">
-              <span class="fas fa-lock"></span>
+              <span class="fas fa-lock"><?php echo $password_err; ?></span>
             </div>
           </div>
         </div>

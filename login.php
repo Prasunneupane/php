@@ -1,36 +1,91 @@
 <?php
-include("config.php");
-//Initialize the session
+// Initialize the session
 session_start();
-
-//Check if the user is already logged in, if yes then redirect him to home page
-if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true){
-  header("location:home.php");
+ 
+// Check if the user is already logged in, if yes then redirect him to welcome page
+if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+    header("location: home.php");
+    exit;
 }
+ 
+// Include config file
+require_once "config.php";
+ 
+// Define variables and initialize with empty values
 $username = $password = "";
-$username_err = $password_err = "";
+$username_err = $password_err = $login_err = "";
+ 
+// Processing form data when form is submitted
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+ 
+    // Check if username is empty
+    if(empty(trim($_POST["username"]))){
+        $username_err = "Please enter username.";
+    } else{
+        $username = trim($_POST["username"]);
+    }
+    
+    // Check if password is empty
+    if(empty(trim($_POST["password"]))){
+        $password_err = "Please enter your password.";
+    } else{
+        $password = trim($_POST["password"]);
+    }
+    
+    // Validate credentials
+    if(empty($username_err) && empty($password_err)){
+        // Prepare a select statement
+        $sql = "SELECT id, username, password FROM admins WHERE username = ?";
+        
+        if($stmt = mysqli_prepare($link, $sql)){
+            // Bind variables to the prepared statement as parameters
+            mysqli_stmt_bind_param($stmt, "s", $param_username);
+            
+            // Set parameters
+            $param_username = $username;
+            
+            // Attempt to execute the prepared statement
+            if(mysqli_stmt_execute($stmt)){
+                // Store result
+                mysqli_stmt_store_result($stmt);
+                
+                // Check if username exists, if yes then verify password
+                if(mysqli_stmt_num_rows($stmt) == 1){                    
+                    // Bind result variables
+                    mysqli_stmt_bind_result($stmt, $id, $username, $hashed_password);
+                    if(mysqli_stmt_fetch($stmt)){
+                        if(password_verify($password, $hashed_password)){
+                            // Password is correct, so start a new session
+                            session_start();
+                            
+                            // Store data in session variables
+                            $_SESSION["loggedin"] = true;
+                            $_SESSION["id"] = $id;
+                            $_SESSION["username"] = $username;                            
+                            
+                            // Redirect user to welcome page
+                            header("location: home.php");
+                        } else{
+                            // Password is not valid, display a generic error message
+                            $login_err = "Invalid username or password.";
+                        }
+                    }
+                } else{
+                    // Username doesn't exist, display a generic error message
+                    $login_err = "Invalid username or password.";
+                }
+            } else{
+                echo "Oops! Something went wrong. Please try again later.";
+            }
 
-//Processing form data when form is submitted
-if($_SERVER["REQUEST_METHOD"] == "POST"){ 
-  if(empty(trim($_POST["username"]))){
-    $username_err = "Please enter username";
-  }else{
-    $username = trim($_POST["username"]);
-  }
-  // Check if password is empty
-  if(empty(trim($_POST["password"]))){
-    $password_err = "Please enter your password";
-  }else{
-    $password = trim($_POST["password"]);
-  }
-
-  //Validate credentials
-  if(empty($username_err) && empty($password_err)){
-    //Prepare a select statement
-    $sql = "SELECT id, username, password FROM admin WHERE username = ?";
-  }
+            // Close statement
+            mysqli_stmt_close($stmt);
+        }
+    }
+    
+    // Close connection
+    mysqli_close($link);
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -57,21 +112,26 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
   <div class="card">
     <div class="card-body login-card-body">
       <p class="login-box-msg">Sign in to start your session</p>
+      <?php 
+        if(!empty($login_err)){
+            echo '<div class="alert alert-danger">' . $login_err . '</div>';
+        }        
+        ?>
 
-      <form action="home.php" method="post">
+      <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
         <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="Enter username" name="username" required>
+          <input type="text"  placeholder="Enter username"  name="username" class="form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $username; ?>" required>
           <div class="input-group-append">
             <div class="input-group-text">
-              <span class="fas fa-user"></span>
+              <span class="fas fa-user"><?php echo $username_err; ?></span>
             </div>
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Password" name="password" required>
+          <input type="password"  name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" placeholder="Password" required>
           <div class="input-group-append">
             <div class="input-group-text">
-              <span class="fas fa-lock"></span>
+              <span class="fas fa-lock"><?php echo $password_err; ?></span>
             </div>
           </div>
         </div>
@@ -104,7 +164,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
       <!-- /.social-auth-links -->
 
       <p class="mb-1">
-        <a href="forgot-password.html">I forgot my password</a>
+        <a href="forgot-password.php">I forgot my password</a>
       </p>
       <p class="mb-0">
         <a href="register.php" class="text-center">Register a new membership</a>
@@ -116,9 +176,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 <!-- /.login-box -->
 
 <!-- jQuery -->
-<script srplugins/jquery/jquery.min.js"></script>
+<script src= "plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
-<script srplugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src= "plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
 </body>
