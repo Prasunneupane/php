@@ -1,7 +1,7 @@
 <?php
 include_once("at_class.php");
-$result = mysqli_query($mysqli,"select * from emp_detail ORDER BY id ASC");
-   
+$result = mysqli_query($mysqli,"select * from emp_detail");
+//$row = mysqli_num_rows($result); 
 ?>
 
 <!DOCTYPE html>
@@ -70,62 +70,10 @@ $result = mysqli_query($mysqli,"select * from emp_detail ORDER BY id ASC");
 
     <!-- Messages Dropdown Menu -->
     <li class="nav-item dropdown">
-      <a class="nav-link" data-toggle="dropdown" href="#">
-        <i class="far fa-comments"></i>
-        <span class="badge badge-danger navbar-badge">3</span>
-      </a>
-      <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-        <a href="#" class="dropdown-item">
-          <!-- Message Start -->
-          <div class="media">
-            <img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-            <div class="media-body">
-              <h3 class="dropdown-item-title">
-                Brad Diesel
-                <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-              </h3>
-              <p class="text-sm">Call me whenever you can...</p>
-              <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-            </div>
-          </div>
-          <!-- Message End -->
+        <a class="nav-link"  href="logout.php">Logout
+          <i class="fas fa-sign-out-alt"></i>
+          
         </a>
-        <div class="dropdown-divider"></div>
-        <a href="#" class="dropdown-item">
-          <!-- Message Start -->
-          <div class="media">
-            <img src="dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-            <div class="media-body">
-              <h3 class="dropdown-item-title">
-                John Pierce
-                <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-              </h3>
-              <p class="text-sm">I got your message bro</p>
-              <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-            </div>
-          </div>
-          <!-- Message End -->
-        </a>
-        <div class="dropdown-divider"></div>
-        <a href="#" class="dropdown-item">
-          <!-- Message Start -->
-          <div class="media">
-            <img src="dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-            <div class="media-body">
-              <h3 class="dropdown-item-title">
-                Nora Silvester
-                <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-              </h3>
-              <p class="text-sm">The subject goes here</p>
-              <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-            </div>
-          </div>
-          <!-- Message End -->
-        </a>
-        <div class="dropdown-divider"></div>
-        <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-      </div>
-    </li>
     <!-- Notifications Dropdown Menu -->
     <li class="nav-item dropdown">
       <a class="nav-link" data-toggle="dropdown" href="#">
@@ -276,25 +224,30 @@ $result = mysqli_query($mysqli,"select * from emp_detail ORDER BY id ASC");
               </div>
               <!-- /.card-header -->
               <div class="card-body">
+              
                 <table id="example1" class="table table-bordered ">
                   <thead>
                   <tr>
-                    
+                    <th>Image</th>
                     <th>Name</th>
                     <th>Gender</th>
                     <th>Mobile</th>
                     <th>Action</th>
+                    
                   </tr>
                   </thead>
                   <tbody>
                   <?php
+                  
                   while($res = mysqli_fetch_array($result)){
-                  echo"<tr>";
-                    
-                    echo "<td>".$res['emp_name']."</td>";
-                    echo "<td>".$res['emp_gender']."</td>";
-                    echo "<td>".$res['emp_number']."</td>";
-                    echo "<td class='jsfy-sec'><a href='edit.php?id=$res[id]'><button type='button' class='btn btn-block btn-primary'><i class='fas fa-edit'>
+                    ?>
+                  <tr>
+                    <td> <img src="?php echo $res['emp_file'];?>"></td>
+                    <td> <?php echo $res['emp_name'];?></td>
+                    <td> <?php echo $res['emp_gender'];?></td>
+                    <td> <?php echo $res['emp_number'];?></td>
+                   
+                   <?php echo "<td class='jsfy-sec'><a href='edit.php?id=$res[id]'><button type='button' class='btn btn-block btn-primary'><i class='fas fa-edit'>
 
                     </i></button></a>";
                     echo "<a href='delete.php?id=$res[id]'><button type='button' class='btn btn-block btn-danger'><i class='far fa-trash-alt'>  </i></button></a>"; 
