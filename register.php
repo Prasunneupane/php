@@ -159,10 +159,7 @@ mysqli_close($link);
           <!-- /.col -->
         </div>
       </form>
-
-     
-
-      <a href="login.php" class="text-center">I already have a membership</a>
+        <a href="login.php" class="text-center">I already have a membership</a>
     </div>
     <!-- /.form-box -->
   </div><!-- /.card -->

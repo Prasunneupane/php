@@ -1,6 +1,6 @@
 <?php
 include_once("at_class.php");
-$result = mysqli_query($mysqli,"select * from emp_detail");
+$result = mysqli_query($mysqli,"SELECT * from emp_detail ORDER by id ASC");
 //$row = mysqli_num_rows($result); 
 ?>
 
@@ -242,7 +242,7 @@ $result = mysqli_query($mysqli,"select * from emp_detail");
                   while($res = mysqli_fetch_array($result)){
                     ?>
                   <tr>
-                    <td> <img src="?php echo $res['emp_file'];?>"></td>
+                    <td> <img src="<?php echo $res['emp_file'];?>" height="100px" width="100px"></td>
                     <td> <?php echo $res['emp_name'];?></td>
                     <td> <?php echo $res['emp_gender'];?></td>
                     <td> <?php echo $res['emp_number'];?></td>

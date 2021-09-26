@@ -6,21 +6,51 @@ if($_POST)
   $emp_name = $_POST['emp_name'];
   $emp_gender = $_POST['emp_gender'];
   $emp_number = $_POST['emp_number'];
-
-  $q = mysqli_query($mysqli,"insert into emp_detail(emp_name,emp_gender,emp_number) values('$emp_name','$emp_gender','$emp_number')") or die(mysqli_error($mysqli)); 
-
-  if($q){
+ // $emp_file = $_POST['emp_file'];
+  $emp_file = $_FILES['emp_file'];
+ // //print_r($files);
+  //echo "<br>";
+  //print_r($emp_name);
+  $filename = $emp_file['name'];
+  $fileerror = $emp_file['error'];
+  $filetemp = $emp_file['tmp_name'];
+  $fileext = explode('.',$filename);
+  $filecheck = strtolower(end($fileext));
+  $fileextstored = array('png','jpg','jpeg','gif');
+if(in_array($filecheck,$fileextstored)){
+  $destinationfile ='upload/'.$filename;
+  move_uploaded_file($filetemp,$destinationfile);
+   
+  $q = "INSERT INTO emp_detail (emp_name,emp_gender,emp_number,emp_file) VALUES('$emp_name','$emp_gender','$emp_number','$destinationfile')" or die(mysqli_error($mysqli)); 
+  $query = mysqli_query($mysqli,$q);
+  if($query){
     echo "<script>alert('Record Added');</script>";
   }
 
+  
 }
-
-
+}
 ?>
+
+
+
+
+
 <html>
 <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AdminLTE 3 | General Form Elements</title>
+  <head>
+    <style>
+      .main-footer{
+        position:absolute;
+         bottom:0;
+        width:100%;
+        height:60px;   /* Height of the footer */
+        background:#6cf;
+      }
+    </style>
+  </head>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -79,62 +109,10 @@ if($_POST)
 
     <!-- Messages Dropdown Menu -->
     <li class="nav-item dropdown">
-      <a class="nav-link" data-toggle="dropdown" href="#">
-        <i class="far fa-comments"></i>
-        <span class="badge badge-danger navbar-badge">3</span>
-      </a>
-      <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-        <a href="#" class="dropdown-item">
-          <!-- Message Start -->
-          <div class="media">
-            <img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-            <div class="media-body">
-              <h3 class="dropdown-item-title">
-                Brad Diesel
-                <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-              </h3>
-              <p class="text-sm">Call me whenever you can...</p>
-              <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-            </div>
-          </div>
-          <!-- Message End -->
+        <a class="nav-link"  href="logout.php">Logout
+          <i class="fas fa-sign-out-alt"></i>
+          
         </a>
-        <div class="dropdown-divider"></div>
-        <a href="#" class="dropdown-item">
-          <!-- Message Start -->
-          <div class="media">
-            <img src="dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-            <div class="media-body">
-              <h3 class="dropdown-item-title">
-                John Pierce
-                <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-              </h3>
-              <p class="text-sm">I got your message bro</p>
-              <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-            </div>
-          </div>
-          <!-- Message End -->
-        </a>
-        <div class="dropdown-divider"></div>
-        <a href="#" class="dropdown-item">
-          <!-- Message Start -->
-          <div class="media">
-            <img src="dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-            <div class="media-body">
-              <h3 class="dropdown-item-title">
-                Nora Silvester
-                <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-              </h3>
-              <p class="text-sm">The subject goes here</p>
-              <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-            </div>
-          </div>
-          <!-- Message End -->
-        </a>
-        <div class="dropdown-divider"></div>
-        <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-      </div>
-    </li>
     <!-- Notifications Dropdown Menu -->
     <li class="nav-item dropdown">
       <a class="nav-link" data-toggle="dropdown" href="#">
@@ -283,7 +261,7 @@ if($_POST)
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form role="form" method="post">
+              <form role="form" method="post" enctype="multipart/form-data">
                 <div class="card-body">
                   <div class="form-group">
                     <label for="exampleInputEmail1">Name</label>
@@ -308,15 +286,25 @@ if($_POST)
                     <label for="exampleInputEmail1">Mobile</label>
                     <input type="text" class="form-control" id="exampleInputEmail1" name="emp_number" placeholder="Enter mobile no">
                   </div>
+                  <div class="form-group">
+                    <label for="exampleInputFile">File input</label>
+                    <div class="input-group">
+                      <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="exampleInputFile" name="emp_file">
+                        <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                      </div>
+                      
+                    </div>
+                  </div>
                   
 
                   
                  
                   
-                </div>
+               
                 <!-- /.card-body -->
 
-                <div class="card-footer">
+                <div class="card-footer" fixed>
                   <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
               </form>
