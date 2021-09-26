@@ -11,13 +11,13 @@ require 'includes/PHPMailer.php';
  use PHPMailer\PHPMailer\PHPMailer;
  use PHPMailer\PHPMailer\SMTP;
  use PHPMailer\PHPMailer\Exception;
-if(isset($_POST['password-reset-token']) && $_POST['email'])
+if(isset($_POST['submit_email']) && $_POST['email'])
 {
-    include "db.php";
+    include "config.php";
      
     $emailId = $_POST['email'];
  
-    $result = mysqli_query($conn,"SELECT * FROM users WHERE email='" . $emailId . "'");
+    $result = mysqli_query($mysqli,"SELECT * FROM admins WHERE email='" . $emailId . "' ");
  
     $row= mysqli_fetch_array($result);
  
@@ -32,11 +32,11 @@ if(isset($_POST['password-reset-token']) && $_POST['email'])
  
     $expDate = date("Y-m-d H:i:s",$expFormat);
  
-    $update = mysqli_query($conn,"UPDATE users set  password='" . $password . "', reset_link_token='" . $token . "' ,exp_date='" . $expDate . "' WHERE email='" . $emailId . "'");
+    //$update = mysqli_query($mysqli,"UPDATE admins set  password ='" . $password . "', reset_link_token='" . $token . "' ,'WHERE email='" . $emailId . "'");
  
-    $link = "<a href='www.yourwebsite.com/reset-password.php?key=".$emailId."&token=".$token."'>Click To Reset password</a>";
+    $link = "<a href='www.yourwebsite.com/forgot-password.php?key=".$emailId."&token=".$token."'>Click To Reset password</a>";
  
-    require_once('phpmail/PHPMailerAutoload.php');
+    require_once('includes/PHPMailer.php');
  
     $mail = new PHPMailer();
  
@@ -55,7 +55,7 @@ if(isset($_POST['password-reset-token']) && $_POST['email'])
     $mail->Port = "465";
     $mail->From='your_gmail_id@gmail.com';
     $mail->FromName='your_name';
-    $mail->AddAddress('reciever_email_id', 'reciever_name');
+    $mail->AddAddress= ('prasunneupane14@gmail.com');
     $mail->Subject  =  'Reset Password';
     $mail->IsHTML(true);
     $mail->Body    = 'Click On This Link to Reset Password '.$link.'';
