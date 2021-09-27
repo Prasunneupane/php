@@ -48,6 +48,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     if(empty(trim($_POST["email"]))){
       $email_err = "Please enter a email.";
   } elseif(!preg_match('/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix', trim($_POST["email"]))){
+                     //'/([\w\s\'\"\+]+[\s]+)?(<)?(([\w\-\.\+]+)@((?:[\w\-]+\.)+)([a-zA-Z]{2,4}))?(>)?/'
       $email_err = "Email can contain special characters numbers,letters.";
   } else{
       // Prepare a select statement

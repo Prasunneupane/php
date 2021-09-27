@@ -1,7 +1,5 @@
-
 <?php
-
-
+require_once "config.php";
 
 
 require 'includes/PHPMailer.php';
@@ -11,11 +9,12 @@ require 'includes/PHPMailer.php';
  use PHPMailer\PHPMailer\PHPMailer;
  use PHPMailer\PHPMailer\SMTP;
  use PHPMailer\PHPMailer\Exception;
-if(isset($_POST['submit_email']) && $_POST['email'])
+
+
+ if(isset($_POST['submit_email']) && $_POST['email'])
 {
-    include "config.php";
-     
-    $emailId = $_POST['email'];
+    
+     $emailId = $_POST['email'];
  
     $result = mysqli_query($mysqli,"SELECT * FROM admins WHERE email='" . $emailId . "' ");
  
@@ -32,11 +31,11 @@ if(isset($_POST['submit_email']) && $_POST['email'])
  
     $expDate = date("Y-m-d H:i:s",$expFormat);
  
-    //$update = mysqli_query($mysqli,"UPDATE admins set  password ='" . $password . "', reset_link_token='" . $token . "' ,'WHERE email='" . $emailId . "'");
+   // $update = mysqli_query($mysqli,"UPDATE admins SET  password ='" . $password . "', reset_link_token='" . $token . "' ,exp_date='" . $expDate . "' WHERE email='" . $emailId . "'");
  
-    $link = "<a href='www.yourwebsite.com/forgot-password.php?key=".$emailId."&token=".$token."'>Click To Reset password</a>";
+    $link = "<a href='http://localhost/liteadmin/php/forgot-password.php?key=".$emailId."&token=".$token."'>Click To Reset password</a>";
  
-    require_once('includes/PHPMailer.php');
+    
  
     $mail = new PHPMailer();
  
@@ -45,17 +44,21 @@ if(isset($_POST['submit_email']) && $_POST['email'])
     // enable SMTP authentication
     $mail->SMTPAuth = true;                  
     // GMAIL username
-    $mail->Username = "your_email_id@gmail.com";
+    $mail->Username = "user@example.com";
     // GMAIL password
-    $mail->Password = "your_gmail_password";
+    $mail->Password = "secret";
     $mail->SMTPSecure = "ssl";  
     // sets GMAIL as the SMTP server
     $mail->Host = "smtp.gmail.com";
     // set the SMTP port for the GMAIL server
     $mail->Port = "465";
-    $mail->From='your_gmail_id@gmail.com';
-    $mail->FromName='your_name';
+    //set sender email
+    $mail->From='prasunneupane14@gmail.com';
+    //set sender name
+    $mail->FromName='Prasun Neupane';
+    // set reciever email
     $mail->AddAddress= ('prasunneupane14@gmail.com');
+    //set subject
     $mail->Subject  =  'Reset Password';
     $mail->IsHTML(true);
     $mail->Body    = 'Click On This Link to Reset Password '.$link.'';
@@ -70,5 +73,6 @@ if(isset($_POST['submit_email']) && $_POST['email'])
   }else{
     echo "Invalid Email Address. Go back";
   }
-} 
+}
+
 ?>
