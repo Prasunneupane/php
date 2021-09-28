@@ -1,8 +1,8 @@
 <?php
-require_once "config.php";
 
 
-require 'includes/PHPMailer.php';
+
+ require 'includes/PHPMailer.php';
  require 'includes/SMTP.php';
  require 'includes/Exception.php';
 
@@ -11,10 +11,16 @@ require 'includes/PHPMailer.php';
  use PHPMailer\PHPMailer\Exception;
 
 
- if(isset($_POST['submit_email']) && $_POST['email'])
+ if(isset($_POST['submit_email'])  &&  $_POST['email'])
 {
+  include 'config.php';
     
-     $emailId = $_POST['email'];
+    
+    
+    $emailId = $_POST['email'];
+    
+
+    
  
     $result = mysqli_query($mysqli,"SELECT * FROM admins WHERE email='" . $emailId . "' ");
  
@@ -25,16 +31,17 @@ require 'includes/PHPMailer.php';
      
      $token = md5($emailId).rand(10,9999);
  
-     $expFormat = mktime(
-     date("H"), date("i"), date("s"), date("m") ,date("d")+1, date("Y")
-     );
+     //$expFormat = mktime(
+     //date("H"), date("i"), date("s"), date("m") ,date("d")+1, date("Y")
+    // );
  
-    $expDate = date("Y-m-d H:i:s",$expFormat);
+    //$expDate = date("Y-m-d H:i:s",$expFormat);
  
-   // $update = mysqli_query($mysqli,"UPDATE admins SET  password ='" . $password . "', reset_link_token='" . $token . "' ,exp_date='" . $expDate . "' WHERE email='" . $emailId . "'");
+     //$update = mysqli_query($mysqli,"UPDATE admins  WHERE email='" . $emailId . "'");
  
-    $link = "<a href='http://localhost/liteadmin/php/forgot-password.php?key=".$emailId."&token=".$token."'>Click To Reset password</a>";
- 
+    $link = "<a href='http://localhost/liteadmin/php/forgot-password.php?email=".$emailId."&token=".$token."'>Click To Reset password</a>";
+    
+   
     
  
     $mail = new PHPMailer();
@@ -44,9 +51,9 @@ require 'includes/PHPMailer.php';
     // enable SMTP authentication
     $mail->SMTPAuth = true;                  
     // GMAIL username
-    $mail->Username = "user@example.com";
+    $mail->Username = "prasunneupane14@gmail.com";
     // GMAIL password
-    $mail->Password = "secret";
+    $mail->Password = "pr@sunbh@i123";
     $mail->SMTPSecure = "ssl";  
     // sets GMAIL as the SMTP server
     $mail->Host = "smtp.gmail.com";
@@ -57,7 +64,7 @@ require 'includes/PHPMailer.php';
     //set sender name
     $mail->FromName='Prasun Neupane';
     // set reciever email
-    $mail->AddAddress= ('prasunneupane14@gmail.com');
+    $mail->AddAddress= ('psagar.bibhuti@gmail.com');
     //set subject
     $mail->Subject  =  'Reset Password';
     $mail->IsHTML(true);
