@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 
 
  require 'includes/PHPMailer.php';
@@ -60,7 +60,7 @@
     // set the SMTP port for the GMAIL server
     $mail->Port = "465";
     //set sender email
-    $mail->From='prasunneupane14@gmail.com';
+    $mail->From=('prasunneupane14@gmail.com');
     //set sender name
     $mail->FromName='Prasun Neupane';
     // set reciever email
