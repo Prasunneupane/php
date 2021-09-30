@@ -242,7 +242,9 @@ $result = mysqli_query($mysqli,"SELECT * from emp_detail ORDER by id ASC");
                   while($res = mysqli_fetch_array($result)){
                     ?>
                   <tr>
-                    <td> <img src="<?php echo $res['emp_file'];?>" height="100px" width="100px"></td>
+                    <td> <img src="<?php echo $res['emp_file'];?>" height="100px" width="100px">
+
+                  </td>
                     <td> <?php echo $res['emp_name'];?></td>
                     <td> <?php echo $res['emp_gender'];?></td>
                     <td> <?php echo $res['emp_number'];?></td>
@@ -326,7 +328,7 @@ $result = mysqli_query($mysqli,"SELECT * from emp_detail ORDER by id ASC");
       "autoWidth": false,
       "responsive": true,
     });
-  });
+  });                                  
 </script>
 </body>
 </html>

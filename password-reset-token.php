@@ -64,7 +64,7 @@ session_start();
     //set sender name
     $mail->FromName='Prasun Neupane';
     // set reciever email
-    $mail->AddAddress= ('psagar.bibhuti@gmail.com');
+    $mail->addAddress= ('prasunneupane14@gmail.com');
     //set subject
     $mail->Subject  =  'Reset Password';
     $mail->IsHTML(true);

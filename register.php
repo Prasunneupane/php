@@ -49,7 +49,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
       $email_err = "Please enter a email.";
   } elseif(!preg_match('/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix', trim($_POST["email"]))){
                      //'/([\w\s\'\"\+]+[\s]+)?(<)?(([\w\-\.\+]+)@((?:[\w\-]+\.)+)([a-zA-Z]{2,4}))?(>)?/'
-      $email_err = "Email can contain special characters numbers,letters.";
+      $email_err = "Email can contain special characters numbers, letters.";
   } else{
       // Prepare a select statement
       $sql = "SELECT id FROM admins WHERE email = ?";
