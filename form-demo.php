@@ -6,7 +6,7 @@ if($_POST)
   $emp_name = $_POST['emp_name'];
   $emp_gender = $_POST['emp_gender'];
   $emp_number = $_POST['emp_number'];
- // $emp_file = $_POST['emp_file'];
+  // $emp_file = $_POST['emp_file'];
   $emp_file = $_FILES['emp_file'];
  // //print_r($files);
   //echo "<br>";

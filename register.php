@@ -55,7 +55,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
       $sql = "SELECT id FROM admins WHERE email = ?";
       
       if($stmt = mysqli_prepare($mysqli, $sql)){
-          // Bind variables to the prepared statement as parameters
+          // Bind variables  to the prepared statement as parameters
           mysqli_stmt_bind_param($stmt, "s",$param_email);
           
           // Set parameters
@@ -79,8 +79,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
           mysqli_stmt_close($stmt);
       }
   }
-
-
 //Validate Password
 if(empty(trim($_POST["password"]))){
   $password_err = "Please enter a password.";     
@@ -96,7 +94,7 @@ if(empty(trim($_POST["confirm_password"]))){
 } else{
   $confirm_password = trim($_POST["confirm_password"]);
   if(empty($password_err) && ($password != $confirm_password)){
-      $confirm_password_err = "Password did not match.";
+      $confirm_password_err = "Password did not match."; 
   }
 }
 

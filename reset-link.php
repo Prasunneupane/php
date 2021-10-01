@@ -21,7 +21,7 @@
         <div class="col-2">
           
           <button type="submit" name="submit_email" class="btn btn-primary btn-block">Register</button>
-          </div>
+          </div>  
         </div>
     </form>
   </body>

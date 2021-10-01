@@ -10,6 +10,16 @@ $result = mysqli_query($mysqli,"SELECT * from emp_detail ORDER by id ASC");
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AdminLTE 3 | DataTables</title>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.2.js"></script>
+<script type="text/javascript">
+$(function () {
+$("#fileupload1").change(function () {
+$("#spnName").html($("#fileupload1").val().substring($("#fileupload1").val().lastIndexOf('\\') + 1));
+});
+});
+</script>
+
+
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -21,7 +31,11 @@ $result = mysqli_query($mysqli,"SELECT * from emp_detail ORDER by id ASC");
   <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
-  <style>.jsfy-sec{display: flex;}.jsfy-sec a{margin-right: 20px;}</style>
+  <style>.jsfy-sec{display: flex;}.jsfy-sec a{margin-right: 20px;}
+  #fixed{
+    position: fixed;
+  }
+</style>
 </head>
 <body class="hold-transition sidebar-mini">
   <!-- Preloader -->
@@ -116,7 +130,7 @@ $result = mysqli_query($mysqli,"SELECT * from emp_detail ORDER by id ASC");
 <!-- /.navbar -->
 
 <!-- Main Sidebar Container -->
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
+<aside class="main-sidebar sidebar-dark-primary elevation-4" id="fixed">
   <!-- Brand Logo -->
   <a href="index3.html" class="brand-link">
     <img src="download.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
@@ -124,7 +138,7 @@ $result = mysqli_query($mysqli,"SELECT * from emp_detail ORDER by id ASC");
   </a>
 
   <!-- Sidebar -->
-  <div class="sidebar">
+  <div class="sidebar" >
     <!-- Sidebar user panel (optional) -->
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
       <div class="image">
@@ -183,7 +197,8 @@ $result = mysqli_query($mysqli,"SELECT * from emp_detail ORDER by id ASC");
                 <p>Table</p>
               </a>
             </li>
-            
+          </ul> 
+</nav>
         
     <!-- /.sidebar-menu -->
   </div>
@@ -243,17 +258,23 @@ $result = mysqli_query($mysqli,"SELECT * from emp_detail ORDER by id ASC");
                     ?>
                   <tr>
                     <td> <img src="<?php echo $res['emp_file'];?>" height="100px" width="100px">
-
-                  </td>
-                    <td> <?php echo $res['emp_name'];?></td>
+                        <form id="form1">
+                        <div> <br>
+                        <input style= "display:none" type="file"  id="fileupload1">
+                        <input type="button" class="button" id="btnUpload" onclick='$("#fileupload1").click()' value="Upload"/>
+                        <span id="spnName"></span>
+                        </div>
+                        </form>
+                    </td>
+                    <td> <?php echo $res['emp_name'];?>  </td>
                     <td> <?php echo $res['emp_gender'];?></td>
                     <td> <?php echo $res['emp_number'];?></td>
                    
-                   <?php echo "<td class='jsfy-sec'><a href='edit.php?id=$res[id]'><button type='button' class='btn btn-block btn-primary'><i class='fas fa-edit'>
+                    <?php echo "<td class='jsfy-sec'><a href='edit.php?id=$res[id]'><button type='button' class='btn btn-block btn-primary'><i class='fas fa-edit'>
 
                     </i></button></a>";
                     echo "<a href='delete.php?id=$res[id]'><button type='button' class='btn btn-block btn-danger'><i class='far fa-trash-alt'>  </i></button></a>"; 
-                  }                 
+                    }                 
                   ?>
                   
                   
@@ -313,22 +334,6 @@ $result = mysqli_query($mysqli,"SELECT * from emp_detail ORDER by id ASC");
 <!-- AdminLTE for demo purposes -->
 <script src="dist/js/demo.js"></script>
 <!-- Page specific script -->
-<script>
-  $(function () {
-    $("#example1").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-    });
-  });                                  
-</script>
+
 </body>
 </html>
