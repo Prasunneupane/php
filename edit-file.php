@@ -46,7 +46,7 @@ background: #51A8CA;
 </style>
 </head>
 <body>
-<form id="form1>
+<form id="form1">
 <div><br/>
 <input style="display:none" type="file" id="fileupload1" />
 <input type="button" class="button" id="btnUpload" onclick='$("#fileupload1").click()' value="Upload"/>
