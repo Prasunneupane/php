@@ -176,6 +176,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 <!-- /.login-box -->
 
 <!-- jQuery -->
+<!-- CKEditor -->
+<script src="https://cdn.ckeditor.com/ckeditor5/30.0.0/classic/ckeditor.js"></script>
+
 <script src= "plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
 <script src= "plugins/bootstrap/js/bootstrap.bundle.min.js"></script>

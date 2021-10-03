@@ -14,20 +14,11 @@ session_start();
  if(isset($_POST['submit_email'])  &&  $_POST['email'])
 {
   include 'config.php';
-    
-    
-    
-    $emailId = $_POST['email'];
-    
-
-    
- 
-    $result = mysqli_query($mysqli,"SELECT * FROM admins WHERE email='" . $emailId . "' ");
- 
-    $row= mysqli_fetch_array($result);
- 
+  $emailId = $_POST['email'];
+  $result = mysqli_query($mysqli,"SELECT * FROM admins WHERE email='" . $emailId . "' ");
+  $row= mysqli_fetch_array($result);
   if($row)
-  {
+       {
      
      $token = md5($emailId).rand(10,9999);
  
